@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import { createStage, checkCollision } from '../gameHelpers'
 
 
+
+
 import {StyledTetrisWrapper, StyledTetris } from './styles/StyledTetris'
 
 import { UsePlayer } from './../hooks/usePlayer'
@@ -13,15 +15,19 @@ import { useGameStatus } from '../hooks/useGameStatus'
 import Stage from './Stage'
 import Display from './Display'
 import StartButton from './StartButton'
+import BackgroundButton from './BackgroundButton'
+import HighScore, { checkHighScore } from './HighScore'
 
 const Tetris =() => {
     const [dropTime, setDropTime] = useState(null)
     const [gameOver, setGameOver] = useState(false)
+    const [background, setBackground] = useState('Space')
 
     const [player, updatedPlayerPos, resetPlayer, playerRotate] = UsePlayer();
     const [stage, setStage, rowsCleared] = useStage(player, resetPlayer);
 
     const [score, setScore, rows, setRows, level, setLevel] = useGameStatus(rowsCleared);
+
 
     console.log('re-render')
 
@@ -40,6 +46,8 @@ const Tetris =() => {
         setRows(0);
         setLevel(0);
     }
+      
+
     const drop = () =>{
         if (rows > (level + 1) * 10){
             setLevel(prev => prev + 1);
@@ -52,6 +60,7 @@ const Tetris =() => {
                console.log('Game Over')
                setGameOver(true)
                setDropTime(null) 
+               checkHighScore(score)
             }
             updatedPlayerPos({ x: 0, y: 0, collided: true})
         }
@@ -85,20 +94,33 @@ const Tetris =() => {
 
     }
 
+    const onClick = () =>{
+        if (background === 'Space'){
+            setBackground('Ocean')
+        } else {
+            setBackground('Space')
+        }
+    }
     useInterval(()=>{
         drop();
     }, dropTime)
+
+    
     return(
         <StyledTetrisWrapper 
+        background={background}
         role='button' 
         tabIndex ='0' 
         onKeyDown={e => move(e)} 
         onKeyUp={keyUp}>
-            <StyledTetris>
+            <StyledTetris background={background}>
                 <Stage stage={stage}/>
                 <aside>
                     {gameOver ? (
-                        <Display gameOver={gameOver} text='Game Over'/>
+                        <div>
+                            <Display gameOver={gameOver} text='Game Over'/>
+                            <Display text = {`Score ${score}`} />
+                        </div>
                     ) : (
                         <div>
                             <Display text = {`Score ${score}`} />
@@ -107,7 +129,11 @@ const Tetris =() => {
                         </div>
                         )}
                     <StartButton callback={startGame} />
+                    <BackgroundButton background={background} onClick={onClick} />
                 </aside>    
+                <aside>
+                    <HighScore />
+                </aside>
             </StyledTetris>
         </StyledTetrisWrapper>
     )

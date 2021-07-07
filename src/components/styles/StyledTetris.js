@@ -1,11 +1,12 @@
 import styled from 'styled-components'
 
 import bgImage from './../../img/bg-tet.png'
+import uwBgImage from './../../img/uwbgimage.jpg'
 
 export const StyledTetrisWrapper = styled.div`
 width:100vw;
 height: 100vh;
-background: url(${bgImage}) #000;
+background: ${props => (props.background === 'Space' ? `url(${bgImage}) #000` : `url(${uwBgImage})` )};
 background-size:cover ;
 overflow: hidden;
 `
