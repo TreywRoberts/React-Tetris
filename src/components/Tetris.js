@@ -16,7 +16,7 @@ import Stage from './Stage'
 import Display from './Display'
 import StartButton from './StartButton'
 import BackgroundButton from './BackgroundButton'
-import HighScore, { checkHighScore } from './HighScore'
+import HighScore, { checkHighScore, showHighScores } from './HighScore'
 
 const Tetris =() => {
     const [dropTime, setDropTime] = useState(null)
@@ -61,6 +61,7 @@ const Tetris =() => {
                setGameOver(true)
                setDropTime(null) 
                checkHighScore(score)
+               showHighScores();
             }
             updatedPlayerPos({ x: 0, y: 0, collided: true})
         }
