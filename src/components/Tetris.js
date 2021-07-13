@@ -17,6 +17,7 @@ import Display from './Display'
 import StartButton from './StartButton'
 import BackgroundButton from './BackgroundButton'
 import HighScore, { checkHighScore, showHighScores } from './HighScore'
+import PortfolioButton from './PortfolioButton'
 
 const Tetris =() => {
     const [dropTime, setDropTime] = useState(null)
@@ -131,6 +132,7 @@ const Tetris =() => {
                         )}
                     <StartButton callback={startGame} />
                     <BackgroundButton background={background} onClick={onClick} />
+                    <PortfolioButton />
                 </aside>    
                 <aside>
                     <HighScore />
